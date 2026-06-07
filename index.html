@@ -604,7 +604,7 @@ const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLI
   
 const excuses = [
   { cat:"METEOROLOGICAL", excuse:"Gusting winds.", statement:"The wind was clearly not in the approved ATIS report. Investigation ongoing.", factors:["Weather"], checked:["None"] },
-  { cat:"METEOROLOGICAL", excuse:"Crosswind component exceeded my confidence level.", statement:"The crosswind component was within published limits. My confidence limits are proprietary.", factors:["Weather","Pilot"], checked:["Shared"] },
+  { cat:"METEOROLOGICAL", excuse:"I haven't been trained for this crosswind component.", statement:"The airplane was within limits. I was not.", factors:["Weather","Pilot"], checked:["Shared"] },
   { cat:"METEOROLOGICAL", excuse:"Density altitude was spiritually too high.", statement:"Standard calculations fail to account for spiritual density. I have flagged this to the manufacturer.", factors:["Weather","Physics","Environment"], checked:["None"] },
   { cat:"METEOROLOGICAL", excuse:"Unexpected microburst (unconfirmed).", statement:"A microburst was suspected in the vicinity. This remains unconfirmed and may remain so indefinitely.", factors:["Weather"], checked:["None"] },
   { cat:"METEOROLOGICAL", excuse:"Sun was in my eyes.", statement:"The sun was positioned directly in the flight path during final approach. This is a solar system design flaw.", factors:["Environment"], checked:["None"] },
@@ -641,7 +641,7 @@ const excuses = [
   { cat:"ATC / SEQUENCING", excuse:"ATC changed my sequence.", statement:"A sequence change at pattern altitude disrupted my mental model of the universe.", factors:["ATC"], checked:["None"] },
   { cat:"ATC / SEQUENCING", excuse:"Number four behind the Cherokee.", statement:"Extended sequencing resulted in a prolonged final approach inconsistent with briefed expectations.", factors:["ATC"], checked:["None"] },
   { cat:"ATC / SEQUENCING", excuse:"Number five behind the Skyhawk.", statement:"See above. Situation escalated.", factors:["ATC"], checked:["None"] },
-  { cat:"ATC / SEQUENCING", excuse:"Extended downwind.", statement:"The downwind leg exceeded standard length due to traffic sequencing. Energy management was affected.", factors:["ATC","Physics"], checked:["None"] },
+  { cat:"ATC / SEQUENCING", excuse:"Extended downwind.", statement:"I had time to forget how to land.", factors:["ATC","Physics"], checked:["None"] },
   { cat:"ATC / SEQUENCING", excuse:"Extended existential crisis.", statement:"An unplanned philosophical event on downwind disrupted the standard traffic pattern flow.", factors:["Pilot"], checked:["Complete"] },
   { cat:"ATC / SEQUENCING", excuse:"They kept meowing on the radio.", statement:"Frequency saturation prevented timely receipt of critical information. Or I wasn't listening. One of these.", factors:["ATC","Pilot"], checked:["None","Partial"] },
   { cat:"ATC / SEQUENCING", excuse:"Tower controller laughed. (Probably.)", statement:"Audible amusement was suspected from the tower frequency. This was not conducive to focus.", factors:["ATC"], checked:["None"] },
@@ -680,7 +680,7 @@ const excuses = [
   { cat:"COSMOLOGICAL", excuse:"Skill issue.", statement:"This was a skill issue. No further documentation required.", factors:["Pilot"], checked:["Complete"] },
   { cat:"COSMOLOGICAL", excuse:"Unknown. Investigation ongoing.", statement:"The causal chain for this incident has not yet been established. The investigation remains open.", factors:[], checked:["Acknowledged","None"] },
   { cat:"COSMOLOGICAL", excuse:"Ground effect was stronger than usual. No further questions.", statement:"The cushion of air beneath the aircraft was unusually enthusiastic. Refer to physics.", factors:["Physics"], checked:["None"] },
-  { cat:"PILOT SELF-ASSESSMENT", excuse:"Yeah I just held it off a bit too long.", statement:"The aircraft was held in ground effect beyond the optimal duration. The runway ran out of patience first.", factors:["Pilot"], checked:["Acknowledged"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"Yeah... This one was my fault, I held it off a bit too long.", statement:"The aircraft was held in ground effect beyond the optimal duration.", factors:["Pilot"], checked:["Acknowledged"] },
   { cat:"PILOT SELF-ASSESSMENT", excuse:"I floated way more than I wanted to.", statement:"The float was not planned and exceeded all reasonable float projections. Reviewing energy management.", factors:["Pilot","Physics"], checked:["Acknowledged"] },
   { cat:"PILOT SELF-ASSESSMENT", excuse:"The flare was right. The height was not.", statement:"Two separate things. One was correct. This should count for something.", factors:["Pilot"], checked:["Partial"] },
   { cat:"PILOT SELF-ASSESSMENT", excuse:"I came in a touch fast but had plenty of runway.", statement:"Excess energy was successfully managed using available runway length. This is called technique.", factors:["Pilot","Physics"], checked:["Minimal"] },
