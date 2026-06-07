@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Over+the+Rainbow&family=Ruthie&family=Source+Serif+4:ital,wght@0,300;0,400;1,300&display=swap');
+:root {
+  --paper: #F5F0E8;
+  --ink: #1a1a1a;
+  --muted: #666;
+  --rule: #ccc;
+  --rule2: #aaa;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Courier Prime', monospace;
+  min-height: 100vh;
+  padding: 0.75rem 1rem;
+  background:
+    radial-gradient(circle at top, rgba(26,26,26,0.05), transparent 32rem),
+    #fbfaf6;
+  overflow-x: hidden;
+}
+.report-scale {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.form-wrap {
+  width: 760px;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 0 1rem;
+  background: transparent;
+  filter: drop-shadow(0 18px 34px rgba(26, 26, 26, 0.10));
+}
+.header-block { border: 1.5px solid var(--ink); padding: 0.95rem 1.5rem 0.75rem; margin-bottom: 0; position: relative; background: #F5F0E8; }
+.agency-line { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.2rem; }
+.form-title { font-family: 'Courier Prime', monospace; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); line-height: 1.1; }
+.form-subtitle { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 0.25rem; }
+.form-number { position: absolute; top: 1.25rem; right: 1.5rem; font-size: 11px; color: var(--muted); text-align: right; line-height: 1.6; }
+.meta-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-left: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); background: #F5F0E8; }
+.meta-cell { padding: 0.5rem 1rem; border-right: 1px solid var(--rule2); font-size: 11px; background: #F5F0E8; }
+.meta-cell:last-child { border-right: none; }
+.meta-label { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+.meta-value { font-weight: 700; font-size: 12px; color: var(--ink); }
+.section-block { border-left: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); background: #F5F0E8; }
+.section-header { background: var(--ink); color: var(--paper); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; padding: 4px 1rem; font-weight: 700; }
+.section-body { padding: 0.6rem 1.5rem 1rem; background: #F5F0E8; }
+.field-row { margin-bottom: 1.1rem; }
+.field-row:last-child { margin-bottom: 0; }
+.field-label { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.field-value { font-size: 15px; color: var(--ink); border-bottom: 1px solid #999; padding-bottom: 6px; min-height: 28px; font-family: 'Courier Prime', monospace; transition: opacity 0.25s; background: #F5F0E8; }
+.field-value.empty { color: var(--muted); font-style: italic; }
+.form-wrap.filed #excuse-main { color: #1a1a1a; font-size: 22px; }
+.excuse-main { font-size: 18px; font-weight: 700; line-height: 1.35; border-bottom: none; padding-bottom: 0; min-height: 0; background: transparent; width: 100%; }
+.category-badge { display: inline-flex; align-items: center; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; padding: 5px 8px 4px; border: 1px solid var(--ink); color: var(--ink); line-height: 1; }
+.classification-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+.checkbox-group { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 1rem; }
+.check-item { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: #333; }
+.check-box { width: 13px; height: 13px; border: 1.5px solid #888; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--ink); background: #F5F0E8; }
+.check-box.checked { border-color: #1a1a1a; background: #F5F0E8; font-weight: 700; }
+.stamp-area { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; padding: 0.75rem 1.5rem; border-left: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); background: #F5F0E8; }
+.signature-block { text-align: center; flex: 1; }
+.sig-line { border-bottom: 1px solid var(--ink); height: 36px; margin-bottom: 4px; font-size: 22px; display: flex; align-items: flex-end; padding-bottom: 0; color: var(--ink); overflow: hidden; white-space: nowrap; }
+.sig-line.pilot { font-family: 'Over the Rainbow', cursive; font-size: 16px; letter-spacing: 0.01em; }
+.sig-line.cfi { font-family: 'Ruthie', cursive; font-size: 26px; }
+.sig-label { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.sig-placeholder { opacity: 0; }
+.official-stamp { width: 56px; height: 56px; opacity: 0.18; flex-shrink: 0; transition: transform 0.2s; }
+.official-stamp.stamped { opacity: 0.55; }
+.generate-wrap {
+  border-left: 1.5px solid var(--ink);
+  border-right: 1.5px solid var(--ink);
+  border-bottom: 1.5px solid var(--ink);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: #F5F0E8;
+  flex-wrap: nowrap;
+}
+.has-feedback .generate-wrap { border-bottom: none; }
+.generate-actions { display: flex; align-items: center; gap: 0.8rem; flex-wrap: nowrap; flex-shrink: 0; }
+.generate-btn {
+  font-family: 'Courier Prime', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 11px 18px;
+  background: var(--ink);
+  color: #F5F0E8;
+  border: 1.5px solid var(--ink);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+  line-height: 1;
+}
+.generate-btn:hover { opacity: 0.8; }
+
+/* subtle first-load attention cue for the main action */
+@keyframes generateButtonPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: none;
+  }
+  45% {
+    transform: scale(1.025);
+    box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.16);
+  }
+}
+
+.generate-btn.attention-pulse {
+  animation: generateButtonPulse 1.15s ease-in-out 5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .generate-btn.attention-pulse {
+    animation: none;
+    box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.18);
+  }
+}
+
+.incident-count { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; line-height: 1.35; margin-left: auto; white-space: nowrap; }
+.share-btn, .submit-btn {
+  font-family: 'Courier Prime', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 11px 18px;
+  background: #F5F0E8;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+  line-height: 1;
+}
+.share-btn { display: none; }
+.share-btn:hover, .submit-btn:hover { opacity: 0.7; }
+.share-btn.visible { display: inline-flex; align-items: center; justify-content: center; }
+.submit-btn { display: inline-flex; align-items: center; justify-content: center; }
+.share-feedback { display: none; }
+.share-feedback.show { display: block; font-size: 10px; color: var(--muted); letter-spacing: 0.08em; padding: 0 1.5rem 0.6rem; border-left: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); background: #F5F0E8; }
+.disclaimer {
+  font-size: 8px;
+  color: #777;
+  text-align: center;
+  padding-top: 0.65rem;
+  letter-spacing: 0.03em;
+  line-height: 1.35;
+}
+.category-row { display:flex; align-items:center; gap:0.75rem; margin-bottom:0.35rem; }
+.category-row .field-label { margin-bottom:0; white-space:nowrap; line-height:1; }
+.category-row .category-badge { margin-bottom:0; line-height:1; }
+.excuse-main-wrap { border-bottom:none; height:132px; background:var(--paper); padding:0; display:flex; align-items:center; overflow:hidden; }
+.classification-row.no-gap { gap:0; }
+.factors-column { padding-right:1.5rem; }
+.culpability-column { padding-left:1.5rem; border-left:1px solid var(--rule2); }
+.field-label.spaced { margin-bottom:8px; }
+#culpability-list { grid-template-columns:1fr 1fr; }
+#pilot-statement { font-size:13px; line-height:1.5; height:48px; min-height:48px; border-bottom:none; overflow:hidden; }
+
+@media (max-width: 560px) {
+  .excuse-main-wrap { height: 150px; }
+  .form-wrap.filed #excuse-main { font-size: 19px; }
+  #pilot-statement { height: 52px; min-height: 52px; }
+}
+/* ── MODAL ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(26,26,26,0.55);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #F5F0E8;
+  border: 1.5px solid var(--ink);
+  width: 100%;
+  max-width: 560px;
+  max-height: 92vh;
+  overflow-y: auto;
+  position: relative;
+  filter: drop-shadow(0 24px 48px rgba(26,26,26,0.25));
+}
+.modal-header {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-title {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--paper);
+  font-family: 'Courier Prime', monospace;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 0 0 1rem;
+  line-height: 1;
+  opacity: 0.7;
+}
+.modal-close:hover { opacity: 1; }
+.modal-body { padding: 1.25rem 1.5rem 1.5rem; }
+.modal-subhead {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 1.25rem;
+  line-height: 1.6;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.75rem;
+}
+.modal-field { margin-bottom: 1.1rem; }
+.modal-field:last-child { margin-bottom: 0; }
+.modal-label {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 5px;
+  display: block;
+}
+.modal-input, .modal-textarea, .modal-select {
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  color: var(--ink);
+  background: #F5F0E8;
+  border: none;
+  border-bottom: 1.5px solid var(--ink);
+  width: 100%;
+  padding: 6px 0 6px;
+  outline: none;
+  line-height: 1.4;
+}
+.modal-textarea {
+  resize: none;
+  height: 72px;
+  border: 1.5px solid var(--rule2);
+  padding: 8px 10px;
+  border-bottom: 1.5px solid var(--ink);
+}
+.modal-textarea:focus, .modal-input:focus, .modal-select:focus {
+  border-bottom-color: var(--ink);
+  background: #eee9df;
+}
+.modal-select { cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%231a1a1a'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 2px center; padding-right: 18px; }
+.modal-factors { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 1rem; margin-top: 4px; }
+.modal-factor-item { display: flex; align-items: center; gap: 8px; font-size: 12px; cursor: pointer; }
+.modal-factor-item input[type="checkbox"] { width: 13px; height: 13px; accent-color: var(--ink); cursor: pointer; }
+.modal-footer { display: flex; align-items: center; gap: 0.75rem; margin-top: 1.5rem; border-top: 1px solid var(--rule); padding-top: 1rem; }
+.modal-submit-btn {
+  font-family: 'Courier Prime', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 11px 20px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1.5px solid var(--ink);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  line-height: 1;
+}
+.modal-submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.modal-submit-btn:not(:disabled):hover { opacity: 0.8; }
+.modal-cancel-btn {
+  font-family: 'Courier Prime', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 11px 20px;
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  line-height: 1;
+}
+.modal-cancel-btn:hover { opacity: 0.6; }
+.modal-status {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  flex: 1;
+  text-align: right;
+}
+.modal-status.error { color: #a33; }
+.modal-status.success { color: #2a6; }
+
+/* success state */
+.modal-success {
+  display: none;
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+}
+.modal-success.show { display: block; }
+.modal-success-stamp {
+  font-size: 32px;
+  margin-bottom: 1rem;
+}
+.modal-success-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: var(--ink);
+}
+.modal-success-body {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  line-height: 1.7;
+}
+
+.site-footer {
+  text-align: center;
+  margin-top: 5px;
+  font-size: 6.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #aaa;
+}
+
+.mobile-footer-text {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .desktop-footer-text {
+    display: none;
+  }
+
+  .mobile-footer-text {
+    display: inline;
+  }
+
+  .disclaimer {
+    font-size: 6.5px;
+    line-height: 1.35;
+    letter-spacing: 0.03em;
+    padding-top: 0.45rem;
+    color: #888;
+  }
+
+  .site-footer {
+    font-size: 5.5px;
+    letter-spacing: 0.12em;
+    margin-top: 4px;
+    color: #aaa;
+  }
+}
+
+@media (max-width: 720px) {
+  body { padding: 0.35rem; }
+  .report-scale { width: calc(100vw - 0.7rem); max-width: none; margin: 0 auto; overflow: visible; }
+  .form-wrap { width: 760px; max-width: none; margin: 0; filter: none; transform-origin: top left; }
+}
+</style>
+</head>
+<body>
+
+<div class="report-scale">
+<div class="form-wrap">
+  <div class="header-block">
+    <div class="agency-line">Office of Post-Landing Investigations</div>
+    <div class="form-title">LANDING QUALITY INCIDENT REPORT</div>
+    <div class="form-subtitle">Post-Event Causal Factor Analysis & Official Justification</div>
+    <div class="form-number">Form LQIR-001<br>Rev. 06/2026</div>
+  </div>
+  <div class="meta-row">
+    <div class="meta-cell"><div class="meta-label">Report Date</div><div class="meta-value" id="report-date">—</div></div>
+    <div class="meta-cell"><div class="meta-label">Incident No.</div><div class="meta-value" id="incident-no">—</div></div>
+    <div class="meta-cell"><div class="meta-label">Status</div><div class="meta-value" id="report-status">PENDING</div></div>
+  </div>
+  <div class="section-block">
+    <div class="section-header">Section A — Official Causal Determination</div>
+    <div class="section-body">
+      <div class="field-row category-row">
+        <div class="field-label">Category</div>
+        <span class="category-badge" id="cat-badge">—</span>
+      </div>
+      <div class="field-row">
+        <div class="field-label">Primary Causal Factor (Official Determination)</div>
+        <div class="field-value excuse-main excuse-main-wrap" id="excuse-main-wrap"><span id="excuse-main">Press "Generate Official Report" below to file incident.</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-block">
+    <div class="section-header">Section B — Incident Classification</div>
+    <div class="section-body">
+      <div class="classification-row no-gap">
+        <div class="factors-column">
+          <div class="field-label spaced">Contributing Factors</div>
+          <div class="checkbox-group" id="factors-list"></div>
+        </div>
+        <div class="culpability-column">
+          <div class="field-label spaced">Pilot Culpability Assessment</div>
+          <div class="checkbox-group" id="culpability-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section-block">
+    <div class="section-header">Section C — Narrative Supplemental</div>
+    <div class="section-body">
+      <div class="field-row">
+        <div class="field-label">Pilot's Written Statement</div>
+        <div class="field-value" id="pilot-statement">—</div>
+      </div>
+    </div>
+  </div>
+  <div class="stamp-area">
+    <div class="signature-block">
+      <div class="sig-line pilot" id="sig-line"><span class="sig-placeholder">x</span></div>
+      <div class="sig-label">Pilot Signature</div>
+    </div>
+    <div class="signature-block">
+      <div class="sig-line cfi" id="cfi-sig-line"><span class="sig-placeholder">x</span></div>
+      <div class="sig-label">CFI Signature (if applicable)</div>
+    </div>
+    <svg class="official-stamp" id="official-stamp" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="45" cy="45" r="42" fill="none" stroke="#1a1a1a" stroke-width="2.5"/>
+      <circle cx="45" cy="45" r="35" fill="none" stroke="#1a1a1a" stroke-width="1"/>
+      <text x="45" y="42" text-anchor="middle" dominant-baseline="middle" font-family="Courier Prime, monospace" font-size="13" font-weight="700" letter-spacing="1" fill="#1a1a1a">NOT MY</text>
+      <text x="45" y="53" text-anchor="middle" dominant-baseline="middle" font-family="Courier Prime, monospace" font-size="13" font-weight="700" letter-spacing="1" fill="#1a1a1a">FAULT</text>
+      <path id="topArc" d="M 9,45 A 36,36 0 0,1 81,45" fill="none"/>
+      <text font-family="Courier Prime, monospace" font-size="6" font-weight="700" fill="#1a1a1a">
+        <textPath href="#topArc" startOffset="50%" text-anchor="middle">OFFICIALLY DOCUMENTED</textPath>
+      </text>
+      <path id="botArc" d="M 81,45 A 36,36 0 0,1 9,45" fill="none"/>
+      <text font-family="Courier Prime, monospace" font-size="6" font-weight="700" fill="#1a1a1a">
+        <textPath href="#botArc" startOffset="50%" text-anchor="middle">LQIR FORM · REV 04/2026</textPath>
+      </text>
+    </svg>
+  </div>
+  <div class="generate-wrap">
+    <div class="generate-actions">
+      <button class="generate-btn attention-pulse" id="generate-btn" type="button">Generate Official Report</button>
+      <button class="share-btn" id="share-btn" type="button">↗ Share Report</button>
+      <button class="submit-btn" id="open-submit-btn" type="button">+ Submit an Excuse</button>
+    </div>
+    <span class="incident-count" id="incident-count">-</span>
+  </div>
+  <span class="share-feedback" id="share-feedback">Image copied to clipboard</span>
+  <div class="disclaimer">
+  <span class="desktop-footer-text">
+    All findings are legally binding only within the pilot's own mind.<br>
+    Not affiliated with the FAA.
+  </span>
+
+  <span class="mobile-footer-text">
+    Legally binding only within the pilot's mind.<br>
+    Not affiliated with the FAA.
+  </span>
+</div>
+
+<div class="site-footer">
+  burningavgasanddignity.github.io/iswearicanland
+</div>
+</div>
+</div>
+
+<!-- SUBMISSION MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title-text">Form LQIR-SUB · Submit an Excuse for Review</span>
+      <button class="modal-close" id="modal-close" type="button" aria-label="Close">✕</button>
+    </div>
+
+    <!-- form state -->
+    <div id="modal-form-state">
+      <div class="modal-body">
+        <p class="modal-subhead">
+          Think you've got a better excuse than "the Earth moved"? File it here.<br>
+          Submissions are reviewed before going live. Quality control is maintained.
+        </p>
+
+        <div class="modal-field">
+          <label class="modal-label" for="sub-category">Category</label>
+          <select class="modal-select" id="sub-category">
+            <option value="">— Select category —</option>
+            <option>METEOROLOGICAL</option>
+            <option>AIRCRAFT SYSTEMS</option>
+            <option>INSTRUCTOR FACTOR</option>
+            <option>ATC / SEQUENCING</option>
+            <option>STUDENT PROGRESS</option>
+            <option>STUDENT SPIRAL</option>
+            <option>COSMOLOGICAL</option>
+            <option>PILOT SELF-ASSESSMENT</option>
+            <option>LEGAL / PHILOSOPHICAL</option>
+          </select>
+        </div>
+
+        <div class="modal-field">
+          <label class="modal-label" for="sub-excuse">Primary Causal Factor (your excuse)</label>
+          <input class="modal-input" id="sub-excuse" type="text" maxlength="120" placeholder="e.g. The runway was too short. Objectively." autocomplete="off" />
+        </div>
+
+        <div class="modal-field">
+          <label class="modal-label" for="sub-statement">Pilot's Written Statement</label>
+          <textarea class="modal-textarea" id="sub-statement" maxlength="280" placeholder="Official supporting narrative. Keep it deadpan."></textarea>
+        </div>
+
+        <div class="modal-field">
+          <label class="modal-label">Contributing Factors (check all that apply)</label>
+          <div class="modal-factors" id="sub-factors">
+            <label class="modal-factor-item"><input type="checkbox" value="Weather"> Weather</label>
+            <label class="modal-factor-item"><input type="checkbox" value="Aircraft"> Aircraft</label>
+            <label class="modal-factor-item"><input type="checkbox" value="CFI"> CFI</label>
+            <label class="modal-factor-item"><input type="checkbox" value="Pilot"> Pilot</label>
+            <label class="modal-factor-item"><input type="checkbox" value="ATC"> ATC</label>
+            <label class="modal-factor-item"><input type="checkbox" value="Physics"> Physics</label>
+            <label class="modal-factor-item"><input type="checkbox" value="Environment"> Environment</label>
+          </div>
+        </div>
+
+        <div class="modal-field">
+          <label class="modal-label" for="sub-culpability">Pilot Culpability Assessment</label>
+          <select class="modal-select" id="sub-culpability">
+            <option value="">— Select level —</option>
+            <option>None</option>
+            <option>Minimal</option>
+            <option>Partial</option>
+            <option>Shared</option>
+            <option>Acknowledged</option>
+            <option>Complete</option>
+            <option>Reframed</option>
+          </select>
+        </div>
+
+        <div class="modal-field">
+          <label class="modal-label" for="sub-handle">Your callsign / handle (optional)</label>
+          <input class="modal-input" id="sub-handle" type="text" maxlength="40" placeholder="Anonymous if left blank" autocomplete="off" />
+        </div>
+
+        <div class="modal-footer">
+          <button class="modal-submit-btn" id="modal-submit-btn" type="button" disabled>File Report</button>
+          <button class="modal-cancel-btn" id="modal-cancel-btn" type="button">Cancel</button>
+          <span class="modal-status" id="modal-status"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- success state -->
+    <div class="modal-success" id="modal-success">
+      <div class="modal-success-stamp">✈</div>
+      <div class="modal-success-title">Excuse Filed Successfully</div>
+      <p class="modal-success-body">
+        Your submission is pending review.<br>
+        If approved, it will be officially added to the record.<br><br>
+        <span style="color:var(--ink); font-weight:700;">Incident count: not your fault.</span>
+      </p>
+      <div style="margin-top:1.5rem;">
+        <button class="modal-cancel-btn" id="modal-done-btn" type="button">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+
+function fitReportToScreen() {
+  const wrapper = document.querySelector('.report-scale');
+  const form = document.querySelector('.form-wrap');
+  if (!wrapper || !form) return;
+  if (window.innerWidth <= 720) {
+    const scale = Math.min(1, wrapper.clientWidth / 760);
+    form.style.transform = `scale(${scale})`;
+    wrapper.style.height = `${form.offsetHeight * scale}px`;
+  } else {
+    form.style.transform = '';
+    wrapper.style.height = '';
+  }
+}
+window.addEventListener('load', fitReportToScreen);
+window.addEventListener('resize', fitReportToScreen);
+window.addEventListener('orientationchange', fitReportToScreen);
+
+const SUPABASE_URL = 'https://znaigvumbnemtmbyiolx.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_NZ4kW0RVKoHQEBClXg3eOg_Hbtj3DaK';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+const excuses = [
+  { cat:"METEOROLOGICAL", excuse:"Gusting winds.", statement:"The wind was clearly not in the approved ATIS report. Investigation ongoing.", factors:["Weather"], checked:["None"] },
+  { cat:"METEOROLOGICAL", excuse:"Crosswind component exceeded my confidence level.", statement:"The crosswind component was within published limits. My confidence limits are proprietary.", factors:["Weather","Pilot"], checked:["Shared"] },
+  { cat:"METEOROLOGICAL", excuse:"Density altitude was spiritually too high.", statement:"Standard calculations fail to account for spiritual density. I have flagged this to the manufacturer.", factors:["Weather","Physics","Environment"], checked:["None"] },
+  { cat:"METEOROLOGICAL", excuse:"Unexpected microburst (unconfirmed).", statement:"A microburst was suspected in the vicinity. This remains unconfirmed and may remain so indefinitely.", factors:["Weather"], checked:["None"] },
+  { cat:"METEOROLOGICAL", excuse:"The METAR looked at me funny.", statement:"Hostile weather reporting environment. I felt judged.", factors:["Weather"], checked:["Shared"] },
+  { cat:"METEOROLOGICAL", excuse:"Sun was in my eyes.", statement:"The sun was positioned directly in the flight path during final approach. This is a solar system design flaw.", factors:["Environment"], checked:["None"] },
+  { cat:"METEOROLOGICAL", excuse:"Runway illusion.", statement:"The runway presented visual cues inconsistent with actual glidepath. This is a known phenomenon and therefore not my fault.", factors:["Environment","Pilot"], checked:["Partial"] },
+  { cat:"METEOROLOGICAL", excuse:"Ground effect.", statement:"The aircraft encountered a cushion of air near the runway surface and elected to remain in it longer than planned.", factors:["Physics"], checked:["Minimal"] },
+  { cat:"METEOROLOGICAL", excuse:"Flared too early.", statement:"The flare was initiated at a height that, in retrospect, was not the correct height.", factors:["Pilot"], checked:["Acknowledged"] },
+  { cat:"METEOROLOGICAL", excuse:"Flared too late.", statement:"The flare was initiated at a height that was, in retrospect, not the correct height.", factors:["Pilot"], checked:["Acknowledged"] },
+  { cat:"METEOROLOGICAL", excuse:"Flared perfectly but the Earth moved.", statement:"The flare was executed correctly. The planet failed to remain stationary during the maneuver.", factors:["Environment","Physics"], checked:["None"] },
+  { cat:"AIRCRAFT SYSTEMS", excuse:"Cessnas like to float.", statement:"This is a known characteristic of the Cessna airframe and is not operator error.", factors:["Aircraft"], checked:["None"] },
+  { cat:"AIRCRAFT SYSTEMS", excuse:"Needed more right rudder.", statement:"Post-incident analysis confirms that more right rudder was, in fact, required.", factors:["Pilot"], checked:["Acknowledged"] },
+  { cat:"AIRCRAFT SYSTEMS", excuse:"Needed less right rudder.", statement:"Post-incident analysis confirms that less right rudder was required. May have been CFI's fault.", factors:["Pilot","CFI"], checked:["Acknowledged","Shared"] },
+  { cat:"AIRCRAFT SYSTEMS", excuse:"Trim was emotionally unavailable.", statement:"The trim was set correctly. However, it was not supportive during the critical phase of flight.", factors:["Aircraft"], checked:["None"] },
+  { cat:"AIRCRAFT SYSTEMS", excuse:"The tires weren't round enough.", statement:"A cursory inspection suggests the tires may have been slightly polygonal. Getting it checked.", factors:["Aircraft"], checked:["None"] },
+  { cat:"AIRCRAFT SYSTEMS", excuse:"Fuel imbalance (between my ears).", statement:"A significant asymmetry was identified in the pilot's cognitive fuel load. Right tank running low.", factors:["Pilot"], checked:["Complete"] },
+  { cat:"AIRCRAFT SYSTEMS", excuse:"The flap settings lacked enthusiasm.", statement:"Flaps were in the correct position. Their energy, however, was off.", factors:["Aircraft"], checked:["None"] },
+  { cat:"AIRCRAFT SYSTEMS", excuse:"The G1000 distracted me.", statement:"The glass cockpit displayed information I was not emotionally prepared to process at that altitude.", factors:["Aircraft","Pilot"], checked:["Shared"] },
+  { cat:"AIRCRAFT SYSTEMS", excuse:"The steam gauges distracted me.", statement:"The analogue instruments presented information in a format that was unexpectedly distracting at a critical phase.", factors:["Aircraft","Pilot"], checked:["Shared"] },
+  { cat:"AIRCRAFT SYSTEMS", excuse:"The airplane was heavier than expected due to my ego.", statement:"Weight and balance calculations did not account for pilot confidence. CG was aft of limits.", factors:["Pilot","Aircraft"], checked:["Complete"] },
+  { cat:"AIRCRAFT SYSTEMS", excuse:"This one flares completely different to the one I trained on.", statement:"Aircraft type differences were not adequately briefed. This is a aircraft and currency issue, not a skill issue.", factors:["Aircraft","Pilot"], checked:["Partial"] },
+  { cat:"AIRCRAFT SYSTEMS", excuse:"The altimeter in this one reads slightly high. Getting it checked.", statement:"Instrument cross-check was normal. However, the altimeter felt optimistic.", factors:["Aircraft","Pilot"], checked:["Minimal"] },
+  { cat:"AIRCRAFT SYSTEMS", excuse:"The sight picture out of this Cessna is just different. Fact.", statement:"I train on a different aircraft. This is a requalification issue, not a skill issue.", factors:["Aircraft","Pilot"], checked:["Shared"] },
+  { cat:"AIRCRAFT SYSTEMS", excuse:"N-whatever always does this. Everyone at the school knows.", statement:"This aircraft has a documented history of incidents. The school is aware. I am not the first.", factors:["Aircraft"], checked:["None"] },
+  { cat:"INSTRUCTOR FACTOR", excuse:"My instructor enjoys watching me suffer.", statement:"No further corrective action taken by CFI during incident. Pattern consistent with enjoyment.", factors:["CFI"], checked:["None"] },
+  { cat:"INSTRUCTOR FACTOR", excuse:"Instructor wanted another hour of dual.", statement:"Financial incentives may have influenced the CFI's assessment of readiness. No further comment.", factors:["CFI"], checked:["None"] },
+  { cat:"INSTRUCTOR FACTOR", excuse:"Building character.", statement:"This landing was a character-building exercise. My character is now significantly more developed.", factors:["CFI"], checked:["None"] },
+  { cat:"INSTRUCTOR FACTOR", excuse:"\"One more lap.\"", statement:"The CFI requested an additional circuit. This is on record.", factors:["CFI"], checked:["None"] },
+  { cat:"INSTRUCTOR FACTOR", excuse:"\"Let's work on that flare.\"", statement:"The CFI identified the flare as an area for development. This landing was development.", factors:["CFI"], checked:["None"] },
+  { cat:"INSTRUCTOR FACTOR", excuse:"Apparently landing on centerline is important.", statement:"New information received regarding centerline requirements. Incorporating into future operations.", factors:["CFI","Pilot"], checked:["Acknowledged"] },
+  { cat:"INSTRUCTOR FACTOR", excuse:"Instructor saw potential and decided to delay gratification.", statement:"The CFI's belief in my long-term development is touching. It does not explain the landing.", factors:["CFI"], checked:["None"] },
+  { cat:"INSTRUCTOR FACTOR", excuse:"Grabbed the controls at the worst moment and called it a demo.", statement:"CFI intervention occurred at a critical phase and was subsequently reframed as intentional instruction.", factors:["CFI"], checked:["None"] },
+  { cat:"INSTRUCTOR FACTOR", excuse:"Kept saying relax. Made me more tense. This is on him.", statement:"Frequency of 'relax' commands correlated with degrading landing quality. Data supports conclusion.", factors:["CFI"], checked:["None"] },
+  { cat:"INSTRUCTOR FACTOR", excuse:"Went silent on final. Somehow more distracting than talking.", statement:"Unexpected silence on short final created significant cognitive distraction. Please maintain consistent noise levels.", factors:["CFI"], checked:["None"] },
+  { cat:"INSTRUCTOR FACTOR", excuse:"CFI covered the airspeed at 300 feet and didn't say why.", statement:"Airspeed was obscured at a critical phase of flight. This was not in the briefing.", factors:["CFI"], checked:["None"] },
+  { cat:"INSTRUCTOR FACTOR", excuse:"I was taught to flare high. This is a curriculum problem.", statement:"Current technique is consistent with training received. Any deficiency is therefore systemic.", factors:["CFI","Pilot"], checked:["Minimal"] },
+  { cat:"INSTRUCTOR FACTOR", excuse:"CFI breathed really loud on short final. Threw my whole thing off.", statement:"Unexpected auditory input from the right seat during a critical phase created measurable cognitive interference and big changes during short final.", factors:["CFI"], checked:["None"] },
+  { cat:"ATC / SEQUENCING", excuse:"ATC changed my sequence.", statement:"A sequence change at pattern altitude disrupted my mental model of the universe.", factors:["ATC"], checked:["None"] },
+  { cat:"ATC / SEQUENCING", excuse:"Number four behind the Cherokee.", statement:"Extended sequencing resulted in a prolonged final approach inconsistent with briefed expectations.", factors:["ATC"], checked:["None"] },
+  { cat:"ATC / SEQUENCING", excuse:"Number five behind the Skyhawk.", statement:"See above. Situation escalated.", factors:["ATC"], checked:["None"] },
+  { cat:"ATC / SEQUENCING", excuse:"Extended downwind.", statement:"The downwind leg exceeded standard length due to traffic sequencing. Energy management was affected.", factors:["ATC","Physics"], checked:["None"] },
+  { cat:"ATC / SEQUENCING", excuse:"Extended existential crisis.", statement:"An unplanned philosophical event on downwind disrupted the standard traffic pattern flow.", factors:["Pilot"], checked:["Complete"] },
+  { cat:"ATC / SEQUENCING", excuse:"They kept meowing on the radio.", statement:"Frequency saturation prevented timely receipt of critical information. Or I wasn't listening. One of these.", factors:["ATC","Pilot"], checked:["None","Partial"] },
+  { cat:"ATC / SEQUENCING", excuse:"Tower controller laughed. (Probably.)", statement:"Audible amusement was suspected from the tower frequency. This was not conducive to focus.", factors:["ATC"], checked:["None"] },
+  { cat:"ATC / SEQUENCING", excuse:"Tower rushed me. I had 400 more feet of runway in me.", statement:"Exit instruction issued at a point inconsistent with optimal deceleration distance. Conservative estimate: 400ft.", factors:["ATC"], checked:["None"] },
+  { cat:"ATC / SEQUENCING", excuse:"Cessna on final behind me too close. I felt the pressure.", statement:"Perceived pressure from following traffic influenced approach profile. Psychologically, ATC did this.", factors:["ATC","Pilot"], checked:["None"] },
+  { cat:"ATC / SEQUENCING", excuse:"Changed my runway at the last second. Threw my whole scan.", statement:"Runway assignment was modified at a point inconsistent with adequate reconfiguration time.", factors:["ATC"], checked:["Partial"] },
+  { cat:"ATC / SEQUENCING", excuse:"ATC kept me high till the numbers. What exactly did they expect?", statement:"A mathematically buttered landing was no longer achievable.", factors:["ATC","Physics"], checked:["None"] },
+  { cat:"STUDENT PROGRESS", excuse:"Needed just one more lesson.", statement:"One additional lesson would have resolved this. The scheduling did not accommodate this requirement.", factors:["CFI","Pilot"], checked:["Reframed"] },
+  { cat:"STUDENT PROGRESS", excuse:"Solo scheduled for next lesson™.", statement:"This landing occurred in the lesson prior to the planned solo. Context is important.", factors:["Pilot"], checked:["None"] },
+  { cat:"STUDENT PROGRESS", excuse:"Character development arc still loading.", statement:"Progress is being made. This incident represents a data point, not a conclusion.", factors:["Pilot"], checked:["None"] },
+  { cat:"STUDENT PROGRESS", excuse:"Working toward the coveted 100-hour solo.", statement:"Hour accumulation strategy is on track. This event has been logged.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"STUDENT PROGRESS", excuse:"FAA minimums are merely suggestions.", statement:"Regulatory minimums represent a floor, not a ceiling. I am operating in the space between.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"STUDENT PROGRESS", excuse:"Collecting flight hours like Pokémon cards.", statement:"Each landing, regardless of quality, contributes to the collection. Gotta log 'em all.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"STUDENT PROGRESS", excuse:"Building a stronger backstory.", statement:"This incident will feature prominently in future motivational material.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"STUDENT PROGRESS", excuse:"Future scholarship essay material.", statement:"The long-term value of this journey has not yet been fully realized.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"STUDENT PROGRESS", excuse:"Achieving artisanal proficiency.", statement:"Mass-produced smooth landings lack character. This was handcrafted.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"STUDENT PROGRESS", excuse:"Solo delayed for quality assurance testing. CFI's first student.", statement:"CFI's control group has not yet been established. Estimated completion date remains under review.", factors:["CFI"], checked:["None"] },
+  { cat:"STUDENT PROGRESS", excuse:"Currently in beta.", statement:"This pilot is a pre-release version. Known issues are being tracked.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"STUDENT PROGRESS", excuse:"Waiting for Version 2.0 Pilot Update.", statement:"Current firmware pending. Major performance improvements expected in next release.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"STUDENT PROGRESS", excuse:"Grinding XP before unlocking Solo Mode.", statement:"Experience point accumulation is proceeding as planned. Solo Mode remains locked.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"STUDENT PROGRESS", excuse:"Still on the tutorial mission.", statement:"Tutorial completion is a prerequisite for the main campaign. This is the tutorial.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"STUDENT PROGRESS", excuse:"Prestige Level Student Pilot.", statement:"Having completed the standard student pilot experience, this pilot has elected to repeat it for mastery.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"COSMOLOGICAL", excuse:"Mercury in retrograde.", statement:"All aviation activities are inadvisable during retrograde periods. This is well-documented in certain circles.", factors:["Environment"], checked:["None"] },
+  { cat:"COSMOLOGICAL", excuse:"Clouds were judging me.", statement:"Cumuliform activity in the vicinity appeared evaluative in nature. This is an emerging meteorological phenomenon.", factors:["Weather","Environment"], checked:["None"] },
+  { cat:"COSMOLOGICAL", excuse:"Barometric pressure wasn't aligned with my chakras.", statement:"The altimeter setting was technically correct. The chakra setting was not.", factors:["Weather"], checked:["None"] },
+  { cat:"COSMOLOGICAL", excuse:"Solar flare interference.", statement:"Geomagnetic activity was elevated. Effects on pilot cognition are poorly understood and therefore plausible.", factors:["Environment"], checked:["None"] },
+  { cat:"COSMOLOGICAL", excuse:"Wake turbulence from a butterfly.", statement:"A Lepidoptera-class disturbance was observed near the threshold. Wingspan unknown.", factors:["Environment","Physics"], checked:["None"] },
+  { cat:"COSMOLOGICAL", excuse:"The runway moved.", statement:"I have reviewed the approach footage and it is true.", factors:["Environment"], checked:["None"] },
+  { cat:"COSMOLOGICAL", excuse:"Gravity was stronger today.", statement:"Standard gravitational constant appeared to have increased by an unquantified amount. Reporting to NASA.", factors:["Physics"], checked:["None"] },
+  { cat:"COSMOLOGICAL", excuse:"Earth's rotation.", statement:"The Coriolis effect acts on all moving bodies. Its contribution to this landing is unquantified but nonzero.", factors:["Physics","Environment"], checked:["None"] },
+  { cat:"COSMOLOGICAL", excuse:"Geese.", statement:"Geese.", factors:["Environment"], checked:["Minimal"] },
+  { cat:"COSMOLOGICAL", excuse:"Canadian geese.", statement:"Foreign geese. This is an international incident.", factors:["Environment"], checked:["Minimal"] },
+  { cat:"COSMOLOGICAL", excuse:"More geese.", statement:"A subsequent goose-related incident has been recorded. The flock appears organized.", factors:["Environment"], checked:["Partial"] },
+  { cat:"COSMOLOGICAL", excuse:"Lunar influence.", statement:"Tidal forces act on all bodies of fluid, including, arguably, the human brain during flare.", factors:["Environment","Physics"], checked:["None"] },
+  { cat:"COSMOLOGICAL", excuse:"Wrong phase of the moon.", statement:"The lunar calendar was not consulted during preflight. This oversight has been noted.", factors:["Environment"], checked:["None"] },
+  { cat:"COSMOLOGICAL", excuse:"The Wright brothers would understand.", statement:"Powered flight is inherently imprecise. The Wrights knew this. I am in good company.", factors:["Physics"], checked:["None"] },
+  { cat:"COSMOLOGICAL", excuse:"The FAA knows what I did.", statement:"This incident is a matter between this pilot and the relevant regulatory authority.", factors:["Pilot"], checked:["Acknowledged"] },
+  { cat:"COSMOLOGICAL", excuse:"The runway and I had creative differences.", statement:"A fundamental disagreement regarding the intended touchdown point could not be resolved in time.", factors:["Pilot","Environment"], checked:["Shared"] },
+  { cat:"COSMOLOGICAL", excuse:"Skill issue.", statement:"This was a skill issue. No further documentation required.", factors:["Pilot"], checked:["Complete"] },
+  { cat:"COSMOLOGICAL", excuse:"Unknown. Investigation ongoing.", statement:"The causal chain for this incident has not yet been established. The investigation remains open.", factors:[], checked:["Acknowledged","None"] },
+  { cat:"COSMOLOGICAL", excuse:"Ground effect was stronger than usual. No further questions.", statement:"The cushion of air beneath the aircraft was unusually enthusiastic. Refer to physics.", factors:["Physics"], checked:["None"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"Yeah I just held it off a bit long.", statement:"The aircraft was held in ground effect beyond the optimal duration. The runway ran out of patience first.", factors:["Pilot"], checked:["Acknowledged"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"I floated way more than I wanted to.", statement:"The float was not planned and exceeded all reasonable float projections. Reviewing energy management.", factors:["Pilot","Physics"], checked:["Acknowledged"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"The flare was right. The height was not.", statement:"Two separate things. One was correct. This should count for something.", factors:["Pilot"], checked:["Partial"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"I came in a touch fast but had plenty of runway.", statement:"Excess energy was successfully managed using available runway length. This is called technique.", factors:["Pilot","Physics"], checked:["Minimal"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"I just didn't round out at the right height.", statement:"The roundout occurred at a height that was not the correct height. Height selection is under review.", factors:["Pilot"], checked:["Acknowledged"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"The last 50 feet just kind of got away from me.", statement:"Events in the terminal phase of the approach occurred without full pilot involvement.", factors:["Pilot"], checked:["Acknowledged"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"I ballooned it a bit and then it just... arrived.", statement:"Following an unplanned altitude gain, the aircraft returned to the runway under the influence of gravity.", factors:["Pilot","Physics"], checked:["Acknowledged","Complete"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"I was a little high, had a lot of energy to burn.", statement:"The approach was stabilized in the loosest professional interpretation of the word.", factors:["Pilot","Physics"], checked:["Complete"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"That crosswind caught me right at the threshold.", statement:"The crosswind had been present throughout the approach. I chose to acknowledge it late.", factors:["Weather","Pilot"], checked:["Partial"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"I meant to do that. Let's taxi back.", statement:"This landing was intentional. All aspects of it. Taxiing back now.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"I genuinely don't know what happened there.", statement:"This is my honest and complete account of events. Investigation ongoing.", factors:["Pilot"], checked:["Acknowledged","Complete"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"That one surprised me too if I'm being honest.", statement:"The outcome of this approach was not anticipated by any party in the cockpit, including the pilot.", factors:["Pilot"], checked:["Acknowledged"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"I'm going to think about that landing for three days.", statement:"Extended post-incident analysis is planned. Preliminary findings suggest it could have been better.", factors:["Pilot"], checked:["Acknowledged"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"I already know what I did wrong and I don't want to talk about it.", statement:"Root cause has been identified internally. External discussion is not required at this time.", factors:["Pilot"], checked:["Complete"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"My CFI said nothing after that. Somehow worse.", statement:"Post-landing debrief consisted of silence. The silence was more informative than any verbal feedback.", factors:["CFI","Pilot"], checked:["Shared"] },
+  { cat:"PILOT SELF-ASSESSMENT", excuse:"I could see it going wrong and just watched it happen.", statement:"Situational awareness was present. Corrective action was not.", factors:["Pilot"], checked:["Complete"] },
+  { cat:"STUDENT SPIRAL", excuse:"So proud of my approach I forgot there was a landing after it.", statement:"Approach phase was executed with excellence. The landing phase was not adequately anticipated.", factors:["Pilot"], checked:["Complete"] },
+  { cat:"STUDENT SPIRAL", excuse:"Still thinking about the radio call I fumbled on downwind.", statement:"A suboptimal radio transmission on downwind occupied cognitive resources required for the subsequent landing.", factors:["Pilot"], checked:["Acknowledged"] },
+  { cat:"STUDENT SPIRAL", excuse:"Tried so hard to grease it that I completely ballooned it.", statement:"Overcorrection in pursuit of excellence. The FAA does not grade on intent.", factors:["Pilot"], checked:["Complete"] },
+  { cat:"STUDENT SPIRAL", excuse:"Checkride in two weeks. This is just exposure therapy.", statement:"Suboptimal landing executed in controlled training environment for psychological preparation purposes.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"STUDENT SPIRAL", excuse:"Last three were fine. No idea what happened there.", statement:"Previous landing quality does not predict current landing quality. This has been confirmed.", factors:["Pilot"], checked:["Acknowledged"] },
+  { cat:"STUDENT SPIRAL", excuse:"Calculating if I had enough hours to solo. Turns out no.", statement:"In-flight arithmetic confirmed that solo minimums had not yet been met. This was untimely information.", factors:["Pilot"], checked:["Acknowledged","Complete"] },
+  { cat:"STUDENT SPIRAL", excuse:"Brain went completely blank in the flare. Legit nothing.", statement:"At approximately 10ft AGL, cognitive function ceased. The aircraft continued without input.", factors:["Pilot"], checked:["Acknowledged"] },
+  { cat:"STUDENT SPIRAL", excuse:"Done this 60 times in the sim. The ground is just different here.", statement:"Simulator fidelity does not fully replicate the sensation of the planet.", factors:["Pilot","Aircraft"], checked:["Partial"] },
+  { cat:"METEOROLOGICAL", excuse:"ATIS said calm winds. Runway had a very different opinion.", statement:"A discrepancy between reported and actual wind conditions was encountered. One of these sources was wrong.", factors:["Weather","Environment"], checked:["None"] },
+  { cat:"METEOROLOGICAL", excuse:"The windsock was lying. I saw it. It just lied.", statement:"The windsock indicated calm winds. The runway strongly disagreed. One of them is wrong.", factors:["Weather"], checked:["None"] },
+  { cat:"METEOROLOGICAL", excuse:"There was a gust. Small. Personal. It came for me specifically.", statement:"The gust appeared at the threshold and targeted this aircraft exclusively. Unlikely to recur.", factors:["Weather","Pilot"], checked:["None"] },
+  { cat:"METEOROLOGICAL", excuse:"Sun in my eyes for the last 200 feet. Complete aviation hazard.", statement:"Solar position created a visibility hazard during the final 200 feet. Known issue with the sun.", factors:["Environment","Weather"], checked:["None"] },
+  { cat:"METEOROLOGICAL", excuse:"Wind direction changed in the last few seconds. Very confident.", statement:"A rapid wind shift occurred at the threshold. The pilot is very confident about this.", factors:["Weather"], checked:["None"] },
+  { cat:"METEOROLOGICAL", excuse:"Convective lift over the runway made me balloon. It was the heat.", statement:"Unusual thermal activity over the runway surface contributed to an unplanned altitude gain during flare.", factors:["Weather","Physics"], checked:["None"] },
+  { cat:"LEGAL / PHILOSOPHICAL", excuse:"POH doesn't define what smooth means. Legally I'm fine.", statement:"After careful review of the Pilot Operating Handbook, no quantitative smoothness standard was identified.", factors:["Pilot"], checked:["None"] },
+  { cat:"LEGAL / PHILOSOPHICAL", excuse:"A firm landing confirms to the passenger we have arrived.", statement:"Passenger certainty of arrival was maximized. This is a service quality metric.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"LEGAL / PHILOSOPHICAL", excuse:"A good landing is one you walk away from. Nailed it.", statement:"All passengers exited the aircraft unassisted. By the most widely accepted definition, this was a good landing.", factors:["Pilot"], checked:["Reframed"] },
+  { cat:"LEGAL / PHILOSOPHICAL", excuse:"Every landing is smooth relative to not landing at all.", statement:"A comparative framework has been applied in which all landings that occur are preferable to those that do not.", factors:["Physics","Pilot"], checked:["Reframed"] },
+  { cat:"LEGAL / PHILOSOPHICAL", excuse:"Define greased landing. Go on. I'll wait.", statement:"No consensus definition of 'grease' exists in any FAA publication. Complaint is therefore non-actionable.", factors:["Pilot","CFI"], checked:["None"] },
+  { cat:"LEGAL / PHILOSOPHICAL", excuse:"In my culture that is genuinely considered perfect.", statement:"Cultural context not specified in local airport signage. Jurisdiction unclear.", factors:["Pilot"], checked:["None"] },
+  { cat:"LEGAL / PHILOSOPHICAL", excuse:"A firm landing builds character. Mine is very developed.", statement:"Pilot character development has been ongoing since initial training. This event was a continuation.", factors:["Pilot"], checked:["None"] },
+  { cat:"LEGAL / PHILOSOPHICAL", excuse:"The runway and I had a disagreement. We resolved it.", statement:"A fundamental difference of opinion regarding touchdown point was ultimately settled by gravity.", factors:["Pilot","Physics"], checked:["Shared"] },
+];
+
+const signatures = ["just going with it","processing this privately","already know what I did","it was fine","not talking about it","moving on","one more lap","definitely intentional"];
+const cfiSigs = ["noted","character building","we'll work on it","one more time","..."];
+const statuses = ["FILED","REVIEWED","UNDER REVIEW","OFFICIALLY DOCUMENTED","CLOSED (DISPUTED)","CLOSED (UNRESOLVED)"];
+const allFactors = ["Weather","Aircraft","CFI","Pilot","ATC","Physics","Environment"];
+const levels = ["None","Minimal","Partial","Shared","Acknowledged","Complete","Reframed"];
+
+let count = 0;
+const $ = id => document.getElementById(id);
+const dom = {
+  reportDate: $('report-date'), incidentNo: $('incident-no'), reportStatus: $('report-status'),
+  catBadge: $('cat-badge'), excuseMain: $('excuse-main'), pilotStatement: $('pilot-statement'),
+  factorsList: $('factors-list'), culpabilityList: $('culpability-list'),
+  sigLine: $('sig-line'), cfiSigLine: $('cfi-sig-line'), stamp: $('official-stamp'),
+  incidentCount: $('incident-count'), shareBtn: $('share-btn'),
+  formWrap: document.querySelector('.form-wrap'), generateBtn: $('generate-btn'),
+  openSubmitBtn: $('open-submit-btn'),
+};
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const pad = (n, w) => String(n).padStart(w, '0');
+const formatCount = n => `${n} incident${n === 1 ? '' : 's'} on record`;
+
+async function loadIncidentCount() {
+  try {
+    const { data, error } = await supabaseClient.from('site_stats').select('incident_count').eq('id','global').single();
+    if (error) throw error;
+    count = Number(data.incident_count || 0);
+    dom.incidentCount.textContent = formatCount(count);
+  } catch { dom.incidentCount.textContent = formatCount(count); }
+}
+
+async function incrementIncidentCount() {
+  try {
+    const { data, error } = await supabaseClient.rpc('increment_incident_count');
+    if (error) throw error;
+    count = Number(data || 0);
+  } catch { count += 1; }
+  dom.incidentCount.textContent = formatCount(count);
+}
+
+const factorBoxes = new Map();
+const levelBoxes = new Map();
+
+function buildCheckboxes() {
+  const ff = document.createDocumentFragment();
+  allFactors.forEach(label => {
+    const item = document.createElement('div'); item.className = 'check-item';
+    item.innerHTML = `<div class="check-box"></div><span>${label}</span>`;
+    factorBoxes.set(label, item.firstElementChild); ff.appendChild(item);
+  });
+  dom.factorsList.appendChild(ff);
+  const lf = document.createDocumentFragment();
+  levels.forEach(label => {
+    const item = document.createElement('div'); item.className = 'check-item';
+    item.innerHTML = `<div class="check-box"></div><span>${label}</span>`;
+    levelBoxes.set(label, item.firstElementChild); lf.appendChild(item);
+  });
+  dom.culpabilityList.appendChild(lf);
+}
+
+function updateChecks(boxes, selected) {
+  boxes.forEach((box, label) => {
+    const on = selected.includes(label);
+    box.classList.toggle('checked', on);
+    box.textContent = on ? '✕' : '';
+  });
+}
+
+async function generateReport() {
+  dom.generateBtn.classList.remove('attention-pulse');
+  try {
+    const geo = await fetch('https://ipapi.co/json/');
+    const geoData = await geo.json();
+    await supabaseClient.from('incident_clicks').insert([{
+      country: geoData.country_name || null,
+      country_code: geoData.country_code || null,
+    }]);
+  } catch { /* silently fail */ }
+  
+  const ex = pick(excuses);
+  const now = new Date();
+  await incrementIncidentCount();
+  dom.reportDate.textContent = now.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});
+  dom.incidentNo.textContent = `NGL-${pad(now.getFullYear(),4)}-${pad(Math.floor(Math.random()*9000)+1000,4)}`;
+  dom.reportStatus.textContent = pick(statuses);
+  dom.catBadge.textContent = ex.cat;
+  dom.excuseMain.textContent = ex.excuse;
+  dom.excuseMain.classList.remove('empty');
+  dom.excuseMain.classList.add('filed');
+  dom.formWrap.classList.add('filed');
+  dom.pilotStatement.textContent = ex.statement;
+  updateChecks(factorBoxes, ex.factors);
+  updateChecks(levelBoxes, ex.checked);
+  const sigText = pick(signatures);
+  dom.sigLine.textContent = sigText;
+  const len = sigText.length;
+  dom.sigLine.style.fontSize = len <= 12 ? '20px' : len <= 18 ? '17px' : len <= 24 ? '14px' : '12px';
+  dom.cfiSigLine.textContent = pick(cfiSigs);
+  dom.stamp.classList.add('stamped');
+  dom.stamp.style.transform = `rotate(${(Math.random()*22)-11}deg)`;
+  dom.shareBtn.classList.add('visible');
+  fitReportToScreen();
+}
+
+dom.reportDate.textContent = '— / — / —';
+buildCheckboxes();
+loadIncidentCount();
+dom.generateBtn.addEventListener('click', generateReport);
+
+// ── MODAL LOGIC ──
+const overlay = $('modal-overlay');
+const modalFormState = $('modal-form-state');
+const modalSuccess = $('modal-success');
+const subCategory = $('sub-category');
+const subExcuse = $('sub-excuse');
+const subStatement = $('sub-statement');
+const subCulpability = $('sub-culpability');
+const subHandle = $('sub-handle');
+const modalSubmitBtn = $('modal-submit-btn');
+const modalStatus = $('modal-status');
+
+function openModal() {
+  overlay.classList.add('open');
+  modalFormState.style.display = '';
+  modalSuccess.classList.remove('show');
+  document.body.style.overflow = 'hidden';
+  subCategory.focus();
+}
+
+function closeModal() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function validateForm() {
+  const ok = subCategory.value && subExcuse.value.trim().length > 3 && subStatement.value.trim().length > 3 && subCulpability.value;
+  modalSubmitBtn.disabled = !ok;
+}
+
+[subCategory, subExcuse, subStatement, subCulpability].forEach(el => el.addEventListener('input', validateForm));
+
+dom.openSubmitBtn.addEventListener('click', openModal);
+$('modal-close').addEventListener('click', closeModal);
+$('modal-cancel-btn').addEventListener('click', closeModal);
+$('modal-done-btn').addEventListener('click', closeModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal(); });
+
+modalSubmitBtn.addEventListener('click', async () => {
+  const factors = Array.from(document.querySelectorAll('#sub-factors input:checked')).map(cb => cb.value);
+  const payload = {
+    category: subCategory.value,
+    excuse: subExcuse.value.trim(),
+    statement: subStatement.value.trim(),
+    factors,
+    culpability: subCulpability.value,
+    handle: subHandle.value.trim() || null,
+    status: 'pending',
+    submitted_at: new Date().toISOString(),
+  };
+
+  modalSubmitBtn.disabled = true;
+  modalSubmitBtn.textContent = 'Filing...';
+  modalStatus.textContent = '';
+  modalStatus.className = 'modal-status';
+
+  try {
+    const { error } = await supabaseClient.from('excuse_submissions').insert([payload]);
+    if (error) throw error;
+    // reset form
+    subCategory.value = ''; subExcuse.value = ''; subStatement.value = '';
+    subCulpability.value = ''; subHandle.value = '';
+    document.querySelectorAll('#sub-factors input').forEach(cb => cb.checked = false);
+    modalFormState.style.display = 'none';
+    modalSuccess.classList.add('show');
+  } catch (err) {
+    modalStatus.textContent = 'Submission failed. Please try again.';
+    modalStatus.className = 'modal-status error';
+    console.error(err);
+  } finally {
+    modalSubmitBtn.disabled = false;
+    modalSubmitBtn.textContent = 'File Report';
+    validateForm();
+  }
+});
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+async function shareReport() {
+  const btn = dom.shareBtn;
+  const feedback = $('share-feedback');
+  btn.textContent = 'Capturing...';
+  btn.style.opacity = '0.5';
+  try {
+    const canvas = await html2canvas(dom.formWrap, {
+      backgroundColor: '#F5F0E8', scale: Math.min(2, window.devicePixelRatio || 1),
+      useCORS: true, logging: false,
+      ignoreElements: el => el.classList.contains('generate-wrap')
+    });
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    if (!blob) throw new Error('no blob');
+    try {
+      await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
+      feedback.textContent = '✓ Copied to clipboard — paste anywhere to share';
+    } catch {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'landing-incident-report.png'; a.click();
+      URL.revokeObjectURL(url);
+      feedback.textContent = '✓ Report saved — ready to share';
+    }
+    feedback.classList.add('show');
+    dom.formWrap.classList.add('has-feedback');
+    setTimeout(() => { feedback.classList.remove('show'); dom.formWrap.classList.remove('has-feedback'); }, 4000);
+  } catch {
+    feedback.textContent = 'Could not capture report';
+    feedback.classList.add('show');
+    dom.formWrap.classList.add('has-feedback');
+    setTimeout(() => { feedback.classList.remove('show'); dom.formWrap.classList.remove('has-feedback'); }, 3000);
+  } finally {
+    btn.textContent = '↗ Share Report';
+    btn.style.opacity = '';
+  }
+}
+dom.shareBtn.addEventListener('click', shareReport);
+</script>
+</body>
+</html>
