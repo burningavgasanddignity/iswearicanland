@@ -600,8 +600,8 @@ window.addEventListener('orientationchange', fitReportToScreen);
 
 const SUPABASE_URL = 'https://znaigvumbnemtmbyiolx.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpuYWlndnVtYm5lbXRtYnlpb2x4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3ODI5OTcsImV4cCI6MjA5NjM1ODk5N30.ZPowP9K0cfx06cueim6t-k8s3T4Ua5l_xkvFLm0Ql2U';
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  
 const excuses = [
   { cat:"METEOROLOGICAL", excuse:"Gusting winds.", statement:"The wind was clearly not in the approved ATIS report. Investigation ongoing.", factors:["Weather"], checked:["None"] },
   { cat:"METEOROLOGICAL", excuse:"Crosswind component exceeded my confidence level.", statement:"The crosswind component was within published limits. My confidence limits are proprietary.", factors:["Weather","Pilot"], checked:["Shared"] },
